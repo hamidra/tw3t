@@ -1,0 +1,45 @@
+{
+  "name": "tw3t",
+  "version": "1.0.0",
+  "description": "A library to create and validate toml web3 tokens.",
+  "main": "./dist/cjs/lib/index.js",
+  "types": "./dist/cjs/lib/index.d.ts",
+  "repository": "https://github.com/hamidra/tw3t.git",
+  "author": "hamidra <hamid.alipour@gmail.com>",
+  "license": "Apache License 2.0",
+  "scripts": {
+    "build": "yarn build:ems && yarn build:cjs",
+    "build:cjs": "tsc --module commonjs --outDir ./dist/cjs",
+    "build:ems": "tsc --module esnext --outDir ./dist/ems",
+    "test": "jest",
+    "prepare": "yarn build & yarn test"
+  },
+  "dependencies": {
+    "@iarna/toml": "^2.2.5",
+    "@polkadot/api": "^7.9.1",
+    "@polkadot/keyring": "^8.4.1",
+    "@polkadot/util": "^8.4.1",
+    "@polkadot/util-crypto": "^8.4.1",
+    "js-base64": "^3.7.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.5",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-typescript": "^7.16.7",
+    "@types/jest": "^27.4.1",
+    "@types/node": "^17.0.21",
+    "babel-jest": "^27.5.1",
+    "jest": "^27.5.1",
+    "ts-node": "^10.5.0",
+    "typescript": "^4.5.5"
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/lib/index.js",
+      "default": "./dist/ems/lib/index.js"
+    }
+  }
+}
