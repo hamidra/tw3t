@@ -1,49 +1,49 @@
-export interface Header {
+export interface SigSpec {
   /**
    * Algorithm : specifies the signing schema that is used for signing the token.
    */
-  alg: string;
+  algorithm: string;
 
   /**
    * type : specifies the token type. in this case always TW3T.
    */
-  typ: string;
+  token_type: string;
 
   /**
    * address type : specifies the address type and is used to extract the address from signature.
    * (e.g. "ss58" specifies the address to be a [substrate address](https://docs.substrate.io/v3/advanced/ss58/))
    */
-  add: string;
+  address_type: string;
 }
 
-export interface Payload {
+export interface ClaimInfo {
   /**
    * Address Claim : The address of the account that has signed the token.
    */
-  add: string;
+  address: string;
 
   /**
    * Audience Claim: The recipients that the TW3T is intended for.
    * Similar to [RFC7519#section-4.1.3](https://tools.ietf.org/html/rfc7519#section-4.1.3).
    */
-  aud?: string | string[];
+  audiance?: string;
 
   /**
    * Expiration Time Claim - Identifies the expiration time on or after which the TW3T is not accepted for processing.
    * Similar to [RFC7519#section-4.1.4](https://tools.ietf.org/html/rfc7519#section-4.1.4).
    */
-  exp?: number;
+  expires_at?: Date;
 
   /**
    * Not Before Claim - Identifies the time before which the TW3T is not accepted for processing
    * Similar to :[RFC7519#section-4.1.5](https://tools.ietf.org/html/rfc7519#section-4.1.5).
    */
-  nbf?: number;
+  not_before?: Date;
 
   /**
-   * TWT ID - A unique identifier or nonce to prevent the token replay. similar to [RFC7519#section-4.1.7](https://tools.ietf.org/html/rfc7519#section-4.1.7).
+   * nonce - A unique identifier or nonce to prevent the token replay. similar to [RFC7519#section-4.1.7](https://tools.ietf.org/html/rfc7519#section-4.1.7).
    */
-  jti?: string;
+  nonce?: string;
 
   /**
    * Any other optional claim.
