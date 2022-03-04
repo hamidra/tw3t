@@ -1,25 +1,25 @@
-import { SigSpec, ClaimInfo } from "./types.d";
+import { SigSpec, ClaimInfo } from './types.d';
 import {
   TW3TContent,
   TW3TSigner,
   TW3TVerifier,
   PolkaJsSigner,
   PolkaJsVerifier,
-} from "./index";
-import { Keyring } from "@polkadot/keyring";
-import { mnemonicGenerate } from "@polkadot/util-crypto";
+} from './index';
+import { Keyring } from '@polkadot/keyring';
+import { mnemonicGenerate } from '@polkadot/util-crypto';
 
-test("test a valid tw3t using polkadot signer", async () => {
-  let keyring = new Keyring({ type: "ed25519" });
+test('test a valid tw3t using polkadot signer', async () => {
+  let keyring = new Keyring({ type: 'ed25519' });
   let mnemonic = mnemonicGenerate();
   let account = keyring.createFromUri(mnemonic);
   let signingAccount = { account };
   let address = account.address;
 
   let sigSpec = <SigSpec>{
-    algorithm: "ed25519",
-    token_type: "TW3T",
-    address_type: "ss58",
+    algorithm: 'ed25519',
+    token_type: 'TW3T',
+    address_type: 'ss58',
   };
   let claimInfo = <ClaimInfo>{
     address: address,
@@ -27,8 +27,8 @@ test("test a valid tw3t using polkadot signer", async () => {
 
   let exp = new Date();
   exp.setHours(exp.getHours() + 24); // expire in 24 hours
-  let content = new TW3TContent(claimInfo, sigSpec, "Welcome!")
-    .setAudience("uri:test")
+  let content = new TW3TContent(claimInfo, sigSpec, 'Welcome!')
+    .setAudience('uri:test')
     .setExpiration(exp);
   console.log(content.stringify());
   let polkaJsSigner = new PolkaJsSigner(signingAccount);
@@ -38,9 +38,11 @@ test("test a valid tw3t using polkadot signer", async () => {
 
   let polkaJsVerifier = new PolkaJsVerifier();
   let tw3tVerifier = new TW3TVerifier(polkaJsVerifier);
-  let { header: verifiedHeader, payload: verifiedPayload } =
-    await tw3tVerifier.verify(tw3t);
-  expect(verifiedHeader).toEqual(header);
+  let { statement, specification, information } = await tw3tVerifier.verify(
+    tw3t
+  );
+  expect(specification).toEqual(content?.sigSpec);
+  expect(information).toEqual(content?.claimInfo);
 });
 
 /*test("test an invalid tw3t using polkadot signer (wrong address in the payload)", async () => {

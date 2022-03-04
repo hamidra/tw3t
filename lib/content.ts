@@ -1,20 +1,20 @@
-import { SigSpec, ClaimInfo } from "./types.d";
-import { Base64 } from "js-base64";
-import TOML from "./toml";
+import { SigSpec, ClaimInfo } from './types.d';
+import { Base64 } from 'js-base64';
+import TOML from './toml';
 
 class TW3TContent {
   statement: string;
   claimInfo: ClaimInfo;
   sigSpec: SigSpec;
 
-  constructor(claimInfo: ClaimInfo, sigSpec: SigSpec, statement: string = "") {
+  constructor(claimInfo: ClaimInfo, sigSpec: SigSpec, statement: string = '') {
     this.claimInfo = claimInfo;
     this.sigSpec = sigSpec;
     this.statement = statement;
   }
 
   static fromBase64Url(b64Str: string): TW3TContent {
-    let [b64Statement, b64Content] = b64Str.split(".");
+    let [b64Statement, b64Content] = b64Str.split('.');
     let statement = Base64.decode(b64Statement);
     let { information, specification, ...rest } = TOML.parse(
       Base64.decode(b64Content)
@@ -25,10 +25,10 @@ class TW3TContent {
 
   stringify(): string {
     if (!this.claimInfo) {
-      throw new Error("information section can not be empty.");
+      throw new Error('information section can not be empty.');
     }
     if (!this.sigSpec) {
-      throw new Error("specification section can not be empty.");
+      throw new Error('specification section can not be empty.');
     }
 
     let contentStr = TOML.stringify({
@@ -41,10 +41,10 @@ class TW3TContent {
 
   toBase64Url(): string {
     if (!this.claimInfo) {
-      throw new Error("information section can not be empty.");
+      throw new Error('information section can not be empty.');
     }
     if (!this.sigSpec) {
-      throw new Error("specification section can not be empty.");
+      throw new Error('specification section can not be empty.');
     }
 
     let contentStr = TOML.stringify({
@@ -53,7 +53,7 @@ class TW3TContent {
     });
     let statementB64 = Base64.encodeURL(this.statement);
     let contentB64 = Base64.encodeURL(contentStr);
-    return `${statementB64}.${statementB64}`;
+    return `${statementB64}.${contentB64}`;
   }
 
   /**
