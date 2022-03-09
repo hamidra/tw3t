@@ -1,18 +1,19 @@
 # tw3t
 
-TOML Web3 Token (TW3T) is a self-contained web3 authentication token based on [TOML](https://toml.io/en/) format. It is designed as a more human readable alternative to JW3T for Web3 authentication usecases.
+TOML Web3 Token (TW3T) is a self-contained web3 authentication token based on [TOML](https://toml.io/en/) format. It is designed as a more human readable alternative to [JW3T](https://github.com/hamidra/jw3t) for Web3 authentication usecases.
 
 # Why TOML?
 
-[TOML](https://toml.io/en/) is a human-friendly serialization format that is designed to be used as a minimal configuration format that is easy to read by humans. It intends to be more human readable than JSON and simpler than YAML. It unambiguously maps to a hash table and Its simplicity and minimal format makes it a good option for Web3 Tokens that are read and signed by humans.
+[TOML](https://toml.io/en/) is a human-friendly serialization format that is designed to be used as a minimal configuration format that is easy to read by human. It intends to be more human readable than JSON and simpler than YAML. It unambiguously maps to a hash table and Its simplicity and minimal format makes it a good option for Web3 Tokens which are read and signed by humans.
 
 # TW3T
 
-In a tw3t the toml token consists of a **_message_** section, a **_token information_** section, and a **_signing specification_** section. The token is then signed by the user according to the specified signing specification. The base64Url encoded signature is concatenated by the base64Url encoded toml token to build the final signed tw3t.
+A tw3t consists of a **_statement_** and a **_toml object_**, while the **_toml object_** includes a **_token information_** section, and a **_signing specification_** section.
+During the signing process, a message is created by prepending the **_statement_** to the **_toml object_** separated then with two new line (LR) delimitters (/n/n). The token is then signed by the user according to the specified signing specification. The final tw3t is generated from the concatination of the base64Url encoding of **_statement_**, base64Url encoding of **_toml object_**, and base64Url encoding of the **_signature_**.
 
-The final signed token would look like as:
-yyyyyy.zzzzzz
-base64Url(toml) + “.” + base64Url(signature)
+The final signed token would look like as below:
+xxxxx.yyyyyy.zzzzzz
+base64Url(statement) + “.” +base64Url(toml_object) + “.” + base64Url(signature)
 
 # TW3T Content:
 
@@ -20,11 +21,10 @@ The token content consists of 3 sections:
 
 - Statement message:
   An optional message which can work as a greeting message to the user.
-  Since toml supports comments it can also be set as an optional comment.
 - Claim information:
   The included claims will be similar to what was describe for JW3T payload
 - Signing Specification:
-  The signing specification plays a similar role as JW3T header and is used in token signature validation.
+  The signing specification plays a similar role as JW3T header. It specifies the signing algorithm and address derivition method and is used during token signature verification.
 
 # Verification:
 
@@ -45,10 +45,9 @@ proxy-type: The proxy-type claim specifies what type of proxy the proxy account 
 Example TW3T:
 
 ```
-message = “””
 Welcome to example.dapp.io!
 Sign this message and accept the example.dapp.io Terms of Service: example.dapp.io/terms
-“””
+
 
 [information]
 issued-at = 2022-02-02 07:32:00Z
