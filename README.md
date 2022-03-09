@@ -1,3 +1,4 @@
+:warning: _This library is not audited and the spec is still a work in process and likely to change._
 # tw3t
 
 TOML Web3 Token (TW3T) is a self-contained web3 authentication token based on [TOML](https://toml.io/en/) format. It is designed as a more human readable alternative to [JW3T](https://github.com/hamidra/jw3t) for Web3 authentication usecases.
