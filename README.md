@@ -12,8 +12,8 @@ TOML Web3 Token (TW3T) is a self-contained web3 authentication token based on [T
 A tw3t consists of a **_statement_** and a **_toml object_**, while the **_toml object_** includes a **_token information_** section, and a **_signing specification_** section.
 During the signing process, a message is created by prepending the **_statement_** to the **_toml object_** separated then with two new line (LR) delimitters (/n/n). The token is then signed by the user according to the specified signing specification. The final tw3t is generated from the concatination of the base64Url encoding of **_statement_**, base64Url encoding of **_toml object_**, and base64Url encoding of the **_signature_**.
 
-The final signed token would look like as below:
-xxxxx.yyyyyy.zzzzzz
+The final signed token would look like as below:  
+xxxxx.yyyyyy.zzzzzz  
 base64Url(statement) + “.” +base64Url(toml_object) + “.” + base64Url(signature)
 
 # TW3T Content:
