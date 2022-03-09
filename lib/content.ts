@@ -1,48 +1,59 @@
-import { Payload, Header } from "./types.d";
-import { Base64 } from "js-base64";
-import TOML from "./toml";
+import { SigSpec, ClaimInfo } from './types.d';
+import { Base64 } from 'js-base64';
+import TOML from './toml';
 
 class TW3TContent {
-  header: Header;
-  payload: Payload;
+  statement: string;
+  claimInfo: ClaimInfo;
+  sigSpec: SigSpec;
 
-  constructor(header: Header, payload: Payload) {
-    this.payload = payload;
-    this.header = header;
+  constructor(claimInfo: ClaimInfo, sigSpec: SigSpec, statement: string = '') {
+    this.claimInfo = claimInfo;
+    this.sigSpec = sigSpec;
+    this.statement = statement;
   }
 
   static fromBase64Url(b64Str: string): TW3TContent {
-    let [hb64, pb64] = b64Str.split(".");
-    let header = TOML.parse(Base64.decode(hb64));
-    let payload = TOML.parse(Base64.decode(pb64));
-    let tw3t = new TW3TContent(header, payload);
+    let [b64Statement, b64Content] = b64Str.split('.');
+    let statement = Base64.decode(b64Statement);
+    let { information, specification, ...rest } = TOML.parse(
+      Base64.decode(b64Content)
+    );
+    let tw3t = new TW3TContent(information, specification, statement);
     return tw3t;
   }
 
   stringify(): string {
-    if (!this.header) {
-      throw new Error("token header can not be empty.");
+    if (!this.claimInfo) {
+      throw new Error('information section can not be empty.');
     }
-    if (!this.payload) {
-      throw new Error("token payload can not be empty.");
+    if (!this.sigSpec) {
+      throw new Error('specification section can not be empty.');
     }
 
-    let headerStr = TOML.stringify(this.header);
-    let payloadStr = TOML.stringify(this.payload);
-    return `${headerStr}.${payloadStr}`;
+    let contentStr = TOML.stringify({
+      information: this.claimInfo,
+      specification: this.sigSpec,
+    });
+
+    return `${this.statement}\n\n${contentStr}`;
   }
 
   toBase64Url(): string {
-    if (!this.header) {
-      throw new Error("token header can not be empty.");
+    if (!this.claimInfo) {
+      throw new Error('information section can not be empty.');
     }
-    if (!this.payload) {
-      throw new Error("token payload can not be empty.");
+    if (!this.sigSpec) {
+      throw new Error('specification section can not be empty.');
     }
 
-    let headerB64 = Base64.encodeURL(TOML.stringify(this.header));
-    let payloadB64 = Base64.encodeURL(TOML.stringify(this.payload));
-    return `${headerB64}.${payloadB64}`;
+    let contentStr = TOML.stringify({
+      information: this.claimInfo,
+      specification: this.sigSpec,
+    });
+    let statementB64 = Base64.encodeURL(this.statement);
+    let contentB64 = Base64.encodeURL(contentStr);
+    return `${statementB64}.${contentB64}`;
   }
 
   /**
@@ -51,13 +62,8 @@ class TW3TContent {
    * When a Date is passed it is resolved to an epoch (sec) before being used as the claim value.
    * @returns
    */
-  setNotBefore(nbf: number | Date): TW3TContent {
-    if (typeof nbf === "number") {
-      this.payload = { ...this.payload, nbf };
-    } else {
-      let epoch = Math.floor(nbf.getTime() / 1000);
-      this.payload = { ...this.payload, nbf: epoch };
-    }
+  setNotBefore(nbf: Date): TW3TContent {
+    this.claimInfo = { ...this.claimInfo, not_before: nbf };
     return this;
   }
 
@@ -67,13 +73,9 @@ class TW3TContent {
    * When a Date is passed it is resolved to an epoch (sec) before being used as the claim value.
    * @returns
    */
-  setExpiration(exp: number | Date): TW3TContent {
-    if (typeof exp === "number") {
-      this.payload = { ...this.payload, exp };
-    } else {
-      let epoch = Math.floor(exp.getTime() / 1000);
-      this.payload = { ...this.payload, exp: epoch };
-    }
+  setExpiration(exp: Date): TW3TContent {
+    this.claimInfo = { ...this.claimInfo, expires_at: exp };
+
     return this;
   }
 
@@ -83,15 +85,15 @@ class TW3TContent {
    * @returns
    */
   setAudience(aud: string | string[]): TW3TContent {
-    this.payload = { ...this.payload, aud };
+    this.claimInfo = { ...this.claimInfo, audience: aud };
     return this;
   }
 
   /**
    *
    */
-  setAddress(add: string): TW3TContent {
-    this.payload = { ...this.payload, add };
+  setAddress(address: string): TW3TContent {
+    this.claimInfo = { ...this.claimInfo, address };
     return this;
   }
 }
