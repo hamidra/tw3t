@@ -5,16 +5,20 @@ TOML Web3 Token (TW3T) is a self-contained web3 authentication token based on [T
 
 # Why TOML?
 
-[TOML](https://toml.io/en/) is a human-friendly serialization format that is designed to be used as a minimal configuration format that is easy to read by human. It intends to be more human readable than JSON and simpler than YAML. It unambiguously maps to a hash table and Its simplicity and minimal format makes it a good option for Web3 Tokens which are read and signed by humans.
+[TOML](https://toml.io/en/) is a human-friendly serialization format that is designed to be used as a minimal configuration format which is easy to read by human. It intends to be more human readable than JSON and simpler than YAML. It unambiguously maps to a hash table and Its simplicity and minimal format makes it a good option for Web3 Tokens which are read and signed by humans.
 
 # TW3T
 
 A tw3t consists of a **_statement_** and a **_toml object_**, while the **_toml object_** includes a **_token information_** section, and a **_signing specification_** section.
-During the signing process, a message is created by prepending the **_statement_** to the **_toml object_** separated then with two new line (LR) delimitters (/n/n). The token is then signed by the user according to the specified signing specification. The final tw3t is generated from the concatination of the base64Url encoding of **_statement_**, base64Url encoding of **_toml object_**, and base64Url encoding of the **_signature_**.
+During the signing process, a message is created by prepending the **_statement_** to the **_toml object_** separated by two new line (LR) as delimitter (/n/n). The token is then signed by the user according to the specified signing specification. 
 
-The final signed token would look like as below:  
-xxxxx.yyyyyy.zzzzzz  
-base64Url(statement) + “.” +base64Url(toml_object) + “.” + base64Url(signature)
+```signature = sign(statement + "\n\n" + toml_object)```
+
+The final tw3t is generated from the concatenation of the base64Url encoding of the **_statement_**, base64Url encoding of the **_toml object_**, and base64Url encoding of the **_signature_**.
+
+The final signed token would look like as below:
+xxxxx.yyyyyy.zzzzzz
+```base64Url(statement) + “.” +base64Url(toml_object) + “.” + base64Url(signature)```
 
 # TW3T Content:
 
