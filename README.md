@@ -55,19 +55,19 @@ Sign this message and accept the example.dapp.io Terms of Service: example.dapp.
 
 
 [information]
-issued-at = 2022-02-02 07:32:00Z
-not-before =  2022-02-03 07:32:00Z
-expires-at =  2022-02-02 07:32:00Z
+issued_at = 2022-02-02 07:32:00Z
+not_before =  2022-02-03 07:32:00Z
+expires_at =  2022-02-02 07:32:00Z
 address = <signed-in account address>,
 audience = “example.dapp.io”
-on-behalf-of = <primary account address>
-proxy-type = “governance”
+on_behalf_of = <primary account address>
+proxy_type = “governance”
 nonce = “f88b789”
 
 [specification]
 algorithm = ”sr25519”,
-address-type = ”ss58”,
-token-type = ”TW3T”
+address_type = ”ss58”,
+token_type = ”TW3T”
 ```
 
 After seeing these claims information in a token the app will know that any call during this sign-in session is a proxy call of type of “governance” by “signed-in account” on behalf of the specified “primary account address”.
