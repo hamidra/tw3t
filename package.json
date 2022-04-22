@@ -15,7 +15,7 @@
     "prepare": "yarn build & yarn test"
   },
   "dependencies": {
-    "@iarna/toml": "^2.2.5",
+    "@ltd/j-toml": "^1.30.0",
     "@polkadot/api": "^7.9.1",
     "@polkadot/keyring": "^8.4.1",
     "@polkadot/util": "^8.4.1",

@@ -1,7 +1,7 @@
 import { Base64 } from 'js-base64';
 import { SigSpec, ClaimInfo, SigVerifier } from './types.d';
 import { TW3TContent } from './content';
-import TOML from './toml';
+import { TOML } from './toml';
 
 let skew = 300; // seconds
 export class TW3TVerifier {
