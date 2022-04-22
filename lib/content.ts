@@ -1,6 +1,6 @@
 import { SigSpec, ClaimInfo } from './types.d';
 import { Base64 } from 'js-base64';
-import TOML from './toml';
+import { TOML, section } from './toml';
 
 class TW3TContent {
   statement: string;
@@ -16,6 +16,7 @@ class TW3TContent {
   static fromBase64Url(b64Str: string): TW3TContent {
     let [b64Statement, b64Content] = b64Str.split('.');
     let statement = Base64.decode(b64Statement);
+
     let { information, specification, ...rest } = TOML.parse(
       Base64.decode(b64Content)
     );
@@ -32,8 +33,8 @@ class TW3TContent {
     }
 
     let contentStr = TOML.stringify({
-      information: this.claimInfo,
-      specification: this.sigSpec,
+      information: section(this.claimInfo),
+      specification: section(this.sigSpec),
     });
 
     return `${this.statement}\n\n${contentStr}`;
@@ -48,8 +49,8 @@ class TW3TContent {
     }
 
     let contentStr = TOML.stringify({
-      information: this.claimInfo,
-      specification: this.sigSpec,
+      information: section(this.claimInfo),
+      specification: section(this.sigSpec),
     });
     let statementB64 = Base64.encodeURL(this.statement);
     let contentB64 = Base64.encodeURL(contentStr);
